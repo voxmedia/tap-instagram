@@ -593,7 +593,7 @@ python-versions = "*"
 
 [[package]]
 name = "singer-sdk"
-version = "0.4.1"
+version = "0.4.2"
 description = "A framework for building Singer taps"
 category = "main"
 optional = false
@@ -728,7 +728,7 @@ types-urllib3 = "<1.27"
 
 [[package]]
 name = "types-urllib3"
-version = "1.26.8"
+version = "1.26.9"
 description = "Typing stubs for urllib3"
 category = "dev"
 optional = false
@@ -1194,8 +1194,8 @@ simplejson = [
     {file = "simplejson-3.11.1.win32-py3.5.exe", hash = "sha256:c76d55d78dc8b06c96fd08c6cc5e2b0b650799627d3f9ca4ad23f40db72d5f6d"},
 ]
 singer-sdk = [
-    {file = "singer-sdk-0.4.1.tar.gz", hash = "sha256:88e3488cbf06133f7d32814272d392e271803367a14907e54d25537e2bac1783"},
-    {file = "singer_sdk-0.4.1-py3-none-any.whl", hash = "sha256:6b9313fc0bf0311a6541a7c4771f264dad4f6b3069d0bbe14fd1b45f0b2662d1"},
+    {file = "singer-sdk-0.4.2.tar.gz", hash = "sha256:74fb972236b5c77dcb3157f26b7dc66295baee96bf2af5ff5b6e5880e1daca72"},
+    {file = "singer_sdk-0.4.2-py3-none-any.whl", hash = "sha256:c47071df305a7ac8d979a0117c7ddaaebf06051f6cb724f5a3980f7f124b69c0"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
@@ -1292,8 +1292,8 @@ types-requests = [
     {file = "types_requests-2.27.8-py3-none-any.whl", hash = "sha256:8ec9f5f84adc6f579f53943312c28a84e87dc70201b54f7c4fbc7d22ecfa8a3e"},
 ]
 types-urllib3 = [
-    {file = "types-urllib3-1.26.8.tar.gz", hash = "sha256:aa0de26893f138523d5552bbb023826c0cc7ea5749d80c1693c57aab7b55f469"},
-    {file = "types_urllib3-1.26.8-py3-none-any.whl", hash = "sha256:a929c68a57b24eee8f7003357b935b802e17767e752d9237266f799ca48ee326"},
+    {file = "types-urllib3-1.26.9.tar.gz", hash = "sha256:abd2d4857837482b1834b4817f0587678dcc531dbc9abe4cde4da28cef3f522c"},
+    {file = "types_urllib3-1.26.9-py3-none-any.whl", hash = "sha256:4a54f6274ab1c80968115634a55fb9341a699492b95e32104a7c513db9fe02e9"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.0.1-py3-none-any.whl", hash = "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"},
