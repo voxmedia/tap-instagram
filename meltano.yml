@@ -1,0 +1,22 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: 4128aaae-d007-4963-b48b-dcbbbababbfd
+plugins:
+  extractors:
+  - name: tap-instagram
+    namespace: tap_instagram
+    pip_url: -e .
+    capabilities:
+    - state
+    - catalog
+    - discover
+    settings:
+    - name: ig_user_ids
+    - name: access_token
+      kind: password
+    - name: start_date
+      value: '2022-01-01T00:00:00Z'
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
