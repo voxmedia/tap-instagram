@@ -12,6 +12,7 @@ from tap_instagram.streams import (
     MediaInsightsStream,
     MediaStream,
     StoriesStream,
+    StoryInsightsStream,
     UserInsights28DayStream,
     UserInsightsAudienceStream,
     UserInsightsDailyStream,
@@ -24,15 +25,16 @@ from tap_instagram.streams import (
 
 STREAM_TYPES = [
     MediaChildrenStream,
-    # MediaInsightsStream,
+    MediaInsightsStream,
     MediaStream,
-    # StoriesStream,
-    # UserInsights28DayStream,
-    # UserInsightsAudienceStream,
-    # UserInsightsDailyStream,
-    # UserInsightsFollowersStream,
-    # UserInsightsOnlineFollowersStream,
-    # UserInsightsWeeklyStream,
+    StoriesStream,
+    StoryInsightsStream,
+    UserInsights28DayStream,
+    UserInsightsAudienceStream,
+    UserInsightsDailyStream,
+    UserInsightsFollowersStream,
+    UserInsightsOnlineFollowersStream,
+    UserInsightsWeeklyStream,
     UsersStream,
 ]
 
@@ -45,7 +47,6 @@ class TapInstagram(Tap):
     """Instagram tap class."""
     name = "tap-instagram"
 
-    # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
             "access_token",

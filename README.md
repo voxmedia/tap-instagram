@@ -11,11 +11,86 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 pipx install tap-instagram
 ```
 
+## Supported Streams
+
+The Instagram tap replicates the following data:
+* [Users](https://developers.facebook.com/docs/instagram-api/reference/ig-user)
+* [Media](https://developers.facebook.com/docs/instagram-api/reference/ig-user/media)
+* [Stories](https://developers.facebook.com/docs/instagram-api/reference/ig-user/stories)
+* [User Insights](https://developers.facebook.com/docs/instagram-api/reference/ig-user/insights)
+* [Media Insights](https://developers.facebook.com/docs/instagram-api/reference/ig-media/insights)
+* [Story Insights](https://developers.facebook.com/docs/instagram-api/reference/ig-media/insights)
+
+Those sources are spread across a few additional streams since they support varying query parameters, time periods, 
+amounts of historical data, etc. The following section outlines some important information, but defer to the API docs 
+linked above for more detail.
+
+* **Users:** IG User objects representing the Instagram Business or Creator Accounts from the `ig_user_ids` config 
+parameter.
+  * **Replication Method:** Full Table
+* **Media:** IG Media objects representing media published by a given IG User.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Users
+  * **Limitations:** Return a max of 10k of the most recently created media objects for that user. Does not include
+  stories, which are in the "stories" stream.
+* **Stories:** IG Media objects representing stories published by a given IG User in the last 24 hours.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Users
+  * **Limitations:** Stories are only available for 24hrs, do not include Live Video stories or reshared stories.
+* **Media Children:** IG Media objects corresponding to images or videos in an album.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Media
+* **User Insights 28 Day:** User Insights stream containing impressions and reach for a 28 day period.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Users
+* **User Insights Audience:** User Insights stream containing audience metrics audience_city, audience_country, 
+audience_gender_age, audience_locale for a lifetime period.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Users
+* **User Insights Daily:** User Insights stream containing all daily metrics except follower_count, which has less 
+historical data - email_contacts, get_directions_clicks, impressions, phone_call_clicks, profile_views, reach, 
+text_message_clicks, website_clicks.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Users
+* **User Insights Followers:** User Insights stream containing follower_count on a daily time period.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Users
+  * **Limitations:** Only returns data for the last 30 days.
+* **User Insights Online Followers:** User Insights stream containing online_followers on a lifetime time period.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Users
+  * **Limitations:** Only returns data for the last 30 days.
+* **User Insights Weekly:** User Insights stream containing impressions and reach for a weekly period.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Users
+* **Media Insights:** Media Insights stream returning the supported metrics for photo, video, and album Media objects.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Media
+  * **Limitation:** Does not return insights for media published before account was changed from personal to business.
+* **Story Insights:** Media Insights stream returning the supported metrics for story Media objects.
+  * **Replication Method:** Full Table
+  * **Parent Stream:** Stories
+  * **Limitation:** Does not return insights for stories published before account was changed from personal to business.
+
 ## Configuration
 
-### Accepted Config Options
+**The tap accepts the following config options:**
 
-- [ ] `Developer TODO:` Provide a list of config options accepted by the tap.
+- **`ig_user_ids: List[str]` (required)**: List of user IDs of Instagram Business Accounts or Instagram Creator Accounts. One way to 
+find the user ID is by navigating to
+> [Facebook Business Manager](https://business.facebook.com) > Accounts > Instagram accounts > [Your Account]
+
+and you will see the user ID in the URL - https://business.facebook.com/instagram-account-v2s/{user_id}?business_id={business_id}
+
+- **`access_token: str` (required)**: A long-lived **user access token**, which can be obtained by following 
+[these instructions](https://developers.facebook.com/docs/pages/access-tokens). Ensure the access token has the 
+following permissions:
+  - `instagram_basic`
+  - `instagram_manage_insights`
+  - `pages_show_list`
+  - `pages_read_engagement`
+
+  **NOTE: You will need to create a Facebook App if you do not have one already to be able to generate an access token**
 
 A full list of supported settings and capabilities for this
 tap is available by running:
@@ -24,9 +99,6 @@ tap is available by running:
 tap-instagram --about
 ```
 
-### Source Authentication and Authorization
-
-- [ ] `Developer TODO:` If your tap requires special access on the source system, or any special authentication requirements, provide those here.
 
 ## Usage
 
