@@ -1,22 +1,20 @@
 """Stream type classes for tap-instagram."""
 
-import requests
-import urllib.parse
 from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import pendulum
+import requests
 from singer_sdk import typing as th  # JSON Schema typing helpers
 
 from tap_instagram.client import InstagramStream
-
 
 # SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
 
 class UsersStream(InstagramStream):
     """Define custom stream."""
+
     name = "users"
     path = "/{user_id}"
     primary_keys = ["id"]
@@ -47,7 +45,7 @@ class UsersStream(InstagramStream):
         return [{"user_id": user_id for user_id in self.config["ig_user_ids"]}]
 
     def get_url_params(
-            self, context: Optional[dict], next_page_token: Optional[Any]
+        self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         params = super().get_url_params(context, next_page_token)
         params["fields"] = ",".join(self.fields)
@@ -59,6 +57,7 @@ class UsersStream(InstagramStream):
 
 class BaseMediaStream(InstagramStream):
     """Define custom stream."""
+
     parent_stream_type = UsersStream
     primary_keys = ["id"]
     # can't make this incremental since FB doesn't support filtering on the timestamp
@@ -100,14 +99,14 @@ class BaseMediaStream(InstagramStream):
             "caption",
             th.StringType,
             description="Caption. Excludes album children. @ symbol excluded unless the app user can perform "
-                        "admin-equivalent tasks on the Facebook Page connected to the Instagram account used to "
-                        "create the caption.",
+            "admin-equivalent tasks on the Facebook Page connected to the Instagram account used to "
+            "create the caption.",
         ),
         th.Property(
             "comments_count",
             th.IntegerType,
             description="Count of comments on the media. Excludes comments on album child media and the media's "
-                        "caption. Includes replies on comments.",
+            "caption. Includes replies on comments.",
         ),
         th.Property(
             "is_comment_enabled",
@@ -118,7 +117,7 @@ class BaseMediaStream(InstagramStream):
             "like_count",
             th.IntegerType,
             description="Count of likes on the media. Excludes likes on album child media and likes on promoted posts "
-                        "created from the media. Includes replies on comments.",
+            "created from the media. Includes replies on comments.",
         ),
         th.Property(
             "media_product_type",
@@ -134,7 +133,7 @@ class BaseMediaStream(InstagramStream):
             "media_url",
             th.StringType,
             description="Media URL. Will be omitted from responses if the media contains copyrighted material, "
-                        "or has been flagged for a copyright violation.",
+            "or has been flagged for a copyright violation.",
         ),
         th.Property(
             "owner",
@@ -142,16 +141,16 @@ class BaseMediaStream(InstagramStream):
                 th.Property(
                     "id",
                     th.StringType,
-                    description="ID of Instagram user who created the media."
+                    description="ID of Instagram user who created the media.",
                 ),
                 th.Property(
                     "username",
                     th.StringType,
-                    description="Username of Instagram user who created the media."
+                    description="Username of Instagram user who created the media.",
                 ),
             ),
             description="ID of Instagram user who created the media. Only returned if the app user making the query "
-                        "also created the media, otherwise username field will be returned instead.",
+            "also created the media, otherwise username field will be returned instead.",
         ),
         th.Property(
             "permalink",
@@ -182,12 +181,12 @@ class BaseMediaStream(InstagramStream):
             "video_title",
             th.StringType,
             description="Instagram TV media title. Will not be returned if targeting an Instagram TV video created on "
-                        "or after October 5, 2021.",
+            "or after October 5, 2021.",
         ),
     ).to_dict()
 
     def get_url_params(
-            self, context: Optional[dict], next_page_token: Optional[Any]
+        self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         params = super().get_url_params(context, next_page_token)
         params["fields"] = ",".join(self.fields)
@@ -202,18 +201,21 @@ class BaseMediaStream(InstagramStream):
 
 class MediaStream(BaseMediaStream):
     """Define custom stream."""
+
     name = "media"
     path = "/{user_id}/media"  # user_id is populated using child context keys from UsersStream
 
 
 class StoriesStream(BaseMediaStream):
     """Define custom stream."""
+
     name = "stories"
     path = "/{user_id}/stories"  # user_id is populated using child context keys from UsersStream
 
 
 class MediaChildrenStream(BaseMediaStream):
     """Define custom stream."""
+
     name = "media_children"
     parent_stream_type = MediaStream
     path = "/{media_id}/children"  # media_id is populated using child context keys from MediaStream
@@ -238,6 +240,7 @@ class MediaChildrenStream(BaseMediaStream):
 
 class BaseMediaInsightsStream(InstagramStream):
     """Define custom stream."""
+
     path = "/{media_id}/insights"
     primary_keys = "id"
     replication_key = None
@@ -312,14 +315,17 @@ class BaseMediaInsightsStream(InstagramStream):
             )
 
     def get_url_params(
-            self, context: Optional[dict], next_page_token: Optional[Any]
+        self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         params = super().get_url_params(context, next_page_token)
         params["metric"] = self._metrics_for_media_type(context["media_type"])
         return params
 
     def validate_response(self, response: requests.Response) -> None:
-        if response.json().get("error", {}).get("error_user_title") == "Media posted before business account conversion":
+        if (
+            response.json().get("error", {}).get("error_user_title")
+            == "Media posted before business account conversion"
+        ):
             self.logger.warning(f"Skipping: {response.json()['error']}")
             return
         super().validate_response(response)
@@ -327,7 +333,11 @@ class BaseMediaInsightsStream(InstagramStream):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         resp_json = response.json()
         # Handle the specific case where FB returns error because media was posted before business acct creation
-        if resp_json.get("error", {}).get("error_user_title") == "Media posted before business account conversion":
+        # TODO: Refactor to raise a specific error in validate_response and handle that instead
+        if (
+            resp_json.get("error", {}).get("error_user_title")
+            == "Media posted before business account conversion"
+        ):
             return
         for row in resp_json["data"]:
             base_item = {
@@ -344,7 +354,7 @@ class BaseMediaInsightsStream(InstagramStream):
                             item = {
                                 "context": key,
                                 "value": value,
-                                "end_time": values["end_time"]
+                                "end_time": values["end_time"],
                             }
                             item.update(base_item)
                             yield item
@@ -355,6 +365,7 @@ class BaseMediaInsightsStream(InstagramStream):
 
 class MediaInsightsStream(BaseMediaInsightsStream):
     """Define custom stream."""
+
     name = "media_insights"
     parent_stream_type = MediaStream
 
@@ -369,6 +380,7 @@ class MediaInsightsStream(BaseMediaInsightsStream):
 
 class StoryInsightsStream(BaseMediaInsightsStream):
     """Define custom stream."""
+
     name = "story_insights"
     parent_stream_type = StoriesStream
 
@@ -453,13 +465,13 @@ class UserInsightsStream(InstagramStream):
         since = max(self.get_starting_timestamp(context), min_since)
         window_end = min(
             self.get_replication_key_signpost(context),
-            pendulum.instance(since).add(seconds=max_time_window.seconds)
+            pendulum.instance(since).add(seconds=max_time_window.seconds),
         )
         until = min(window_end, max_until)
         return since, until
 
     def get_url_params(
-            self, context: Optional[dict], next_page_token: Optional[Any]
+        self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         # TODO: Is there a cleaner way to do this?
         params = super().get_url_params(context, next_page_token)
@@ -473,7 +485,7 @@ class UserInsightsStream(InstagramStream):
                 context,
                 min_since=self.min_start_date,
                 max_until=self.max_end_date,
-                max_time_window=self.max_time_window
+                max_time_window=self.max_time_window,
             )
             params["since"] = since
             params["until"] = until
@@ -496,7 +508,7 @@ class UserInsightsStream(InstagramStream):
                             item = {
                                 "context": key,
                                 "value": value,
-                                "end_time": values["end_time"]
+                                "end_time": values["end_time"],
                             }
                             item.update(base_item)
                             yield item
@@ -507,6 +519,7 @@ class UserInsightsStream(InstagramStream):
 
 class UserInsightsOnlineFollowersStream(UserInsightsStream):
     """Define custom stream."""
+
     name = "user_insights_online_followers"
     metrics = ["online_followers"]
     time_period = "lifetime"
@@ -515,6 +528,7 @@ class UserInsightsOnlineFollowersStream(UserInsightsStream):
 
 class UserInsightsAudienceStream(UserInsightsStream):
     """Define custom stream."""
+
     name = "user_insights_audience"
     metrics = [
         "audience_city",
@@ -528,6 +542,7 @@ class UserInsightsAudienceStream(UserInsightsStream):
 
 class UserInsightsFollowersStream(UserInsightsStream):
     """Define custom stream."""
+
     name = "user_insights_followers"
     metrics = ["follower_count"]
     time_period = "day"
@@ -536,6 +551,7 @@ class UserInsightsFollowersStream(UserInsightsStream):
 
 class UserInsightsDailyStream(UserInsightsStream):
     """Define custom stream."""
+
     name = "user_insights_daily"
     metrics = [
         "email_contacts",
@@ -553,6 +569,7 @@ class UserInsightsDailyStream(UserInsightsStream):
 
 class UserInsightsWeeklyStream(UserInsightsStream):
     """Define custom stream."""
+
     name = "user_insights_weekly"
     metrics = [
         "impressions",
@@ -563,6 +580,7 @@ class UserInsightsWeeklyStream(UserInsightsStream):
 
 class UserInsights28DayStream(UserInsightsStream):
     """Define custom stream."""
+
     name = "user_insights_28day"
     metrics = [
         "impressions",

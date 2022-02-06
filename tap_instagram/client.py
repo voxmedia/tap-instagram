@@ -1,15 +1,12 @@
 """REST client handling, including InstagramStream base class."""
 
-import requests
 import urllib.parse
 from pathlib import Path
-from typing import Any, Dict, Optional, Union, List, Iterable
+from typing import Any, Dict, Iterable, List, Optional, Union
 
-from memoization import cached
-
+import requests
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
-
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 BASE_URL = "https://graph.facebook.com"
@@ -19,9 +16,6 @@ class InstagramStream(RESTStream):
     # TODO: Return the actual error from the Facebook API when fails
     """Instagram stream class."""
 
-    # url_base = f"https://graph.facebook.com/{user_id}"
-
-    # OR use a dynamic url_base:
     @property
     def url_base(self) -> str:
         """Return the API URL root, configurable via tap settings."""
@@ -58,7 +52,6 @@ class InstagramStream(RESTStream):
     ) -> Dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization."""
         if next_page_token:  # TODO: understand what this does & why it works!
-            # self.logger.warning(f"NEXT TOKEN: {next_page_token}")
             return urllib.parse.parse_qs(urllib.parse.urlparse(next_page_token).query)
         params: dict = {"access_token": self.config["access_token"]}
         if self.replication_key:

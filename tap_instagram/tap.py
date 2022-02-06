@@ -1,10 +1,9 @@
 """Instagram tap class."""
 
-from pathlib import PurePath
 from typing import Dict, List, Optional, Union
 
 import requests
-from singer_sdk import Tap, Stream
+from singer_sdk import Stream, Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 from tap_instagram.streams import (
@@ -21,7 +20,6 @@ from tap_instagram.streams import (
     UserInsightsWeeklyStream,
     UsersStream,
 )
-
 
 STREAM_TYPES = [
     MediaChildrenStream,
@@ -45,6 +43,7 @@ session = requests.Session()
 
 class TapInstagram(Tap):
     """Instagram tap class."""
+
     name = "tap-instagram"
 
     config_jsonschema = th.PropertiesList(
@@ -52,18 +51,18 @@ class TapInstagram(Tap):
             "access_token",
             th.StringType,
             required=True,
-            description="A user access token"
+            description="A user access token",
         ),
         th.Property(
             "ig_user_ids",
             th.ArrayType(th.IntegerType),
             required=True,
-            description="User IDs of the Instagram accounts to replicate"
+            description="User IDs of the Instagram accounts to replicate",
         ),
         th.Property(
             "start_date",
             th.DateTimeType,
-            description="The earliest record date to sync"
+            description="The earliest record date to sync",
         ),
     ).to_dict()
 
@@ -78,7 +77,7 @@ class TapInstagram(Tap):
         url = BASE_URL.format(ig_user_id=user_id)
         data = {
             "fields": "access_token,name",
-            "access_token": self.config.get("access_token")
+            "access_token": self.config.get("access_token"),
         }
         self.logger.info(f"Exchanging access token for user: {user_id}")
         response = session.get(url=url, params=data)
