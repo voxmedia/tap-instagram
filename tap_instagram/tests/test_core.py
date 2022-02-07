@@ -1,7 +1,7 @@
 """Tests standard tap features using the built-in SDK tests library."""
 
-import datetime
-from pathlib import Path
+# import datetime
+# from pathlib import Path
 
 from singer_sdk.helpers._util import read_json_file
 from singer_sdk.testing import get_standard_tap_tests
