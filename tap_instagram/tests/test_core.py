@@ -1,7 +1,7 @@
 """Tests standard tap features using the built-in SDK tests library."""
 
 # import datetime
-# from pathlib import Path
+import os
 
 from singer_sdk.helpers._util import read_json_file
 from singer_sdk.testing import get_standard_tap_tests
@@ -9,7 +9,14 @@ from singer_sdk.testing import get_standard_tap_tests
 from tap_instagram.tap import TapInstagram
 
 CONFIG_PATH = ".secrets/config.json"
-SAMPLE_CONFIG = read_json_file(CONFIG_PATH)
+
+if os.getenv("CI"):  # true when running a GitHub Actions workflow
+    SAMPLE_CONFIG = {
+        "access_token": os.getenv("TAP_INSTAGRAM_ACCESS_TOKEN"),
+        "ig_user_ids": [os.getenv("TAP_INSTAGRAM_USER_ID")],  # TODO: Accept arrays here
+    }
+else:
+    SAMPLE_CONFIG = read_json_file(CONFIG_PATH)
 
 
 # Run standard built-in tap tests from the SDK:

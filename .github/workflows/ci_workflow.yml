@@ -54,5 +54,8 @@ jobs:
       run: |
         poetry install
     - name: Test with pytest
+      env:
+        TAP_INSTAGRAM_ACCESS_TOKEN: ${{ secrets.TAP_INSTAGRAM_ACCESS_TOKEN }}
+        TAP_INSTAGRAM_USER_ID: ${{ secrets.TAP_INSTAGRAM_USER_ID }}
       run: |
         poetry run pytest --capture=no
