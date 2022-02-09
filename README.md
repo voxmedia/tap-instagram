@@ -1,10 +1,10 @@
 # Singer Tap for Instagram
 
-[![test](https://github.com/prratek/tap-instagram/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/prratek/tap-dbt-artifacts/actions/workflows/test.yml)
+[![test](https://github.com/prratek/tap-instagram/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/prratek/tap-instagram/actions/workflows/ci_workflow.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![PyPI Version](https://img.shields.io/pypi/v/tap-instagram?style=flat)](https://pypi.org/project/tap-dbt-artifacts/)
+[![PyPI Version](https://img.shields.io/pypi/v/tap-instagram?style=flat)](https://pypi.org/project/tap-instagram/)
 [![License](https://img.shields.io/pypi/l/tap-instagram)](LICENSE.md)
-[![Python](https://img.shields.io/pypi/pyversions/tap-instagram)](https://pypi.org/project/tap-dbt-artifacts/)
+[![Python](https://img.shields.io/pypi/pyversions/tap-instagram)](https://pypi.org/project/tap-instagram/)
 
 `tap-instagram` is a Singer tap for the [Instagram Graph API](https://developers.facebook.com/docs/instagram-api) built 
 with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
