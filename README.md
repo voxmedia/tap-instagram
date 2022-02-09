@@ -84,7 +84,7 @@ text_message_clicks, website_clicks.
 
 - **`ig_user_ids: List[str]` (required)**: List of user IDs of Instagram Business Accounts or Instagram Creator Accounts. One way to 
 find the user ID is by navigating to
-> [Facebook Business Manager](https://business.facebook.com) > Accounts > Instagram accounts > [Your Account]
+> [Facebook Business Manager Settings](https://business.facebook.com/settings) > Accounts > Instagram accounts > [Your Account]
 
 and you will see the user ID in the URL - https://business.facebook.com/instagram-account-v2s/{user_id}?business_id={business_id}
 
