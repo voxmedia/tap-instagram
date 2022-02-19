@@ -64,6 +64,11 @@ class TapInstagram(Tap):
             th.DateTimeType,
             description="The earliest record date to sync",
         ),
+        th.Property(
+            "metrics_log_level",
+            th.StringType,
+            description="A user access token",
+        ),
     ).to_dict()
 
     @property
