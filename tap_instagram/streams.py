@@ -194,6 +194,7 @@ class BaseMediaStream(InstagramStream):
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         return {
+            "user_id": context["user_id"],
             "media_id": record["id"],
             "media_type": record["media_type"],
         }
@@ -218,6 +219,7 @@ class MediaChildrenStream(BaseMediaStream):
 
     name = "media_children"
     parent_stream_type = MediaStream
+    state_partitioning_keys = ["user_id"]
     path = "/{media_id}/children"  # media_id is populated using child context keys from MediaStream
     # caption, comments_count, is_comment_enabled, like_count, media_product_type, video_title
     # not available on album children
@@ -368,6 +370,7 @@ class MediaInsightsStream(BaseMediaInsightsStream):
 
     name = "media_insights"
     parent_stream_type = MediaStream
+    state_partitioning_keys = ["user_id"]
 
 
 # Insights not available for children media objects
@@ -383,6 +386,7 @@ class StoryInsightsStream(BaseMediaInsightsStream):
 
     name = "story_insights"
     parent_stream_type = StoriesStream
+    state_partitioning_keys = ["user_id"]
 
 
 class UserInsightsStream(InstagramStream):
