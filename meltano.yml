@@ -1,6 +1,8 @@
 version: 1
 send_anonymous_usage_stats: true
 project_id: 4128aaae-d007-4963-b48b-dcbbbababbfd
+include_paths:
+  - ./*.meltano.yml
 plugins:
   extractors:
   - name: tap-instagram

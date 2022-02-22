@@ -266,7 +266,7 @@ class BaseMediaInsightsStream(InstagramStream):
         ),
         th.Property(
             "end_time",
-            th.DateTimeType,
+            th.StringType,
             description="",
         ),
         th.Property(
@@ -422,7 +422,7 @@ class UserInsightsStream(InstagramStream):
         ),
         th.Property(
             "end_time",
-            th.DateTimeType,
+            th.StringType,
             description="",
         ),
         th.Property(
