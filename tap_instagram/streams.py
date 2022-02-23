@@ -482,11 +482,17 @@ class UserInsightsStream(InstagramStream):
 
         Returns: DateTime objects for "since" and "until"
         """
-        since = max(self.get_starting_timestamp(context), min_since)
-        window_end = min(
-            self.get_replication_key_signpost(context),
-            pendulum.instance(since).add(seconds=max_time_window.seconds),
-        )
+        try:
+            since = max(self.get_starting_timestamp(context), min_since)
+            window_end = min(
+                self.get_replication_key_signpost(context),
+                pendulum.instance(since).add(seconds=max_time_window.seconds),
+            )
+        # seeing cases where self.get_starting_timestamp() is null
+        # possibly related to target-bigquery pushing malformed state - https://gitlab.com/meltano/sdk/-/issues/300
+        except TypeError:
+            since = min_since
+            window_end = pendulum.instance(since).add(seconds=max_time_window.seconds)
         until = min(window_end, max_until)
         return since, until
 
