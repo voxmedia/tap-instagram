@@ -197,6 +197,7 @@ class BaseMediaStream(InstagramStream):
             "user_id": context["user_id"],
             "media_id": record["id"],
             "media_type": record["media_type"],
+            "media_product_type": record["media_product_type"],
         }
 
 
@@ -347,7 +348,9 @@ class BaseMediaInsightsStream(InstagramStream):
         self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         params = super().get_url_params(context, next_page_token)
-        params["metric"] = self._metrics_for_media_type(context["media_type"])
+        params["metric"] = self._metrics_for_media_type(
+            context["media_type"], context["media_product_type"]
+        )
         return params
 
     def validate_response(self, response: requests.Response) -> None:

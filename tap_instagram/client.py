@@ -78,4 +78,3 @@ class InstagramStream(RESTStream):
                 f"{response.reason} for path: {self.path}"
             )
             raise RetriableAPIError(msg)
-
