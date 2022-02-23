@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, Optional
 
 import requests
+from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
 
@@ -62,3 +63,19 @@ class InstagramStream(RESTStream):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result rows."""
         yield from extract_jsonpath(self.records_jsonpath, input=response.json())
+
+    def validate_response(self, response: requests.Response) -> None:
+        if 400 <= response.status_code < 500:
+            msg = (
+                f"{response.status_code} Client Error: "
+                f"{response.reason} - {response.json()['error']['message']} for path: {self.path}"
+            )
+            raise FatalAPIError(msg)
+
+        elif 500 <= response.status_code < 600:
+            msg = (
+                f"{response.status_code} Server Error: "
+                f"{response.reason} for path: {self.path}"
+            )
+            raise RetriableAPIError(msg)
+
