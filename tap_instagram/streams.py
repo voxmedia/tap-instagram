@@ -212,6 +212,23 @@ class StoriesStream(BaseMediaStream):
 
     name = "stories"
     path = "/{user_id}/stories"  # user_id is populated using child context keys from UsersStream
+    fields = [
+        "id",
+        "ig_id",
+        "caption",
+        "comments_count",
+        "like_count",
+        "media_product_type",
+        "media_type",
+        "media_url",
+        "owner",
+        "permalink",
+        "shortcode",
+        "thumbnail_url",
+        "timestamp",
+        "username",
+        "video_title",
+    ]
 
 
 class MediaChildrenStream(BaseMediaStream):
@@ -228,7 +245,6 @@ class MediaChildrenStream(BaseMediaStream):
     fields = [
         "id",
         "ig_id",
-        # "media_product_type",
         "media_type",
         "media_url",
         "owner",
