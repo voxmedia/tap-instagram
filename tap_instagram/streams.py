@@ -308,17 +308,28 @@ class BaseMediaInsightsStream(InstagramStream):
     ).to_dict()
 
     @staticmethod
-    def _metrics_for_media_type(media_type: str):
+    def _metrics_for_media_type(media_type: str, media_product_type: str):
+        # TODO: Define types for these function args
         if media_type in ("IMAGE", "VIDEO"):
-            metrics = [
-                "engagement",
-                "impressions",
-                "reach",
-                "saved",
-            ]
-            if media_type == "VIDEO":
-                metrics.append("video_views")
-            return metrics
+            if media_product_type == "STORY":
+                return [
+                    "exits",
+                    "impressions",
+                    "reach",
+                    "replies",
+                    "taps_forward",
+                    "taps_back",
+                ]
+            else:  # media_product_type is "AD" or "FEED"
+                metrics = [
+                    "engagement",
+                    "impressions",
+                    "reach",
+                    "saved",
+                ]
+                if media_type == "VIDEO":
+                    metrics.append("video_views")
+                return metrics
         elif media_type == "CAROUSEL_ALBUM":
             return [
                 "carousel_album_engagement",
