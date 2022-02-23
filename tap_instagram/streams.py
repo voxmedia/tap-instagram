@@ -197,7 +197,8 @@ class BaseMediaStream(InstagramStream):
             "user_id": context["user_id"],
             "media_id": record["id"],
             "media_type": record["media_type"],
-            "media_product_type": record["media_product_type"],
+            # media_product_type not present for carousel children media
+            "media_product_type": record.get("media_product_type"),
         }
 
 
