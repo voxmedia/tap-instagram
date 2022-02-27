@@ -42,7 +42,7 @@ class UsersStream(InstagramStream):
 
     @property
     def partitions(self) -> Optional[List[dict]]:
-        return [{"user_id": user_id for user_id in self.config["ig_user_ids"]}]
+        return [{"user_id": user_id} for user_id in self.config["ig_user_ids"]]
 
     def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
