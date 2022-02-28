@@ -60,6 +60,13 @@ class TapInstagram(Tap):
             description="User IDs of the Instagram accounts to replicate",
         ),
         th.Property(
+            "media_insights_lookback_days",
+            th.IntegerType,
+            default=60,
+            description="The tap fetches media insights for Media objects posted in the last `insights_lookback_days` "
+                        "days - defaults to 14 days if not provided"
+        ),
+        th.Property(
             "start_date",
             th.DateTimeType,
             description="The earliest record date to sync",
