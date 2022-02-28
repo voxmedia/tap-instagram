@@ -64,7 +64,7 @@ class TapInstagram(Tap):
             th.IntegerType,
             default=60,
             description="The tap fetches media insights for Media objects posted in the last `insights_lookback_days` "
-                        "days - defaults to 14 days if not provided"
+            "days - defaults to 14 days if not provided",
         ),
         th.Property(
             "start_date",

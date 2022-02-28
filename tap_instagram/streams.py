@@ -188,7 +188,12 @@ class MediaStream(InstagramStream):
 
     def make_since_param(self, context: Optional[dict]) -> datetime:
         state_ts = self.get_starting_timestamp(context)
-        return pendulum.instance(state_ts).subtract(days=self.config["media_insights_lookback_days"])
+        if state_ts:
+            return pendulum.instance(state_ts).subtract(
+                days=self.config["media_insights_lookback_days"]
+            )
+        else:
+            return state_ts
 
     def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
@@ -210,7 +215,9 @@ class MediaStream(InstagramStream):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         for row in extract_jsonpath(self.records_jsonpath, input=response.json()):
             if "timestamp" in row:
-                row["timestamp"] = pendulum.parse(row["timestamp"]).format("YYYY-MM-DD HH:mm:ss")
+                row["timestamp"] = pendulum.parse(row["timestamp"]).format(
+                    "YYYY-MM-DD HH:mm:ss"
+                )
             yield row
 
 
@@ -361,7 +368,9 @@ class StoriesStream(InstagramStream):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         for row in extract_jsonpath(self.records_jsonpath, input=response.json()):
             if "timestamp" in row:
-                row["timestamp"] = pendulum.parse(row["timestamp"]).format("YYYY-MM-DD HH:mm:ss")
+                row["timestamp"] = pendulum.parse(row["timestamp"]).format(
+                    "YYYY-MM-DD HH:mm:ss"
+                )
             yield row
 
 
@@ -392,7 +401,9 @@ class MediaChildrenStream(MediaStream):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         for row in extract_jsonpath(self.records_jsonpath, input=response.json()):
             if "timestamp" in row:
-                row["timestamp"] = pendulum.parse(row["timestamp"]).format("YYYY-MM-DD HH:mm:ss")
+                row["timestamp"] = pendulum.parse(row["timestamp"]).format(
+                    "YYYY-MM-DD HH:mm:ss"
+                )
             yield row
 
 
@@ -528,14 +539,18 @@ class MediaInsightsStream(InstagramStream):
                             item = {
                                 "context": key,
                                 "value": value,
-                                "end_time": pendulum.parse(values["end_time"]).format("YYYY-MM-DD HH:mm:ss"),
+                                "end_time": pendulum.parse(values["end_time"]).format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                ),
                             }
                             item.update(base_item)
                             yield item
                     else:
                         values.update(base_item)
                         if "end_time" in values:
-                            values["end_time"] = pendulum.parse(values["end_time"]).format("YYYY-MM-DD HH:mm:ss")
+                            values["end_time"] = pendulum.parse(
+                                values["end_time"]
+                            ).format("YYYY-MM-DD HH:mm:ss")
                         yield values
 
 
@@ -687,14 +702,18 @@ class StoryInsightsStream(InstagramStream):
                             item = {
                                 "context": key,
                                 "value": value,
-                                "end_time": pendulum.parse(values["end_time"]).format("YYYY-MM-DD HH:mm:ss"),
+                                "end_time": pendulum.parse(values["end_time"]).format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                ),
                             }
                             item.update(base_item)
                             yield item
                     else:
                         values.update(base_item)
                         if "end_time" in values:
-                            values["end_time"] = pendulum.parse(values["end_time"]).format("YYYY-MM-DD HH:mm:ss")
+                            values["end_time"] = pendulum.parse(
+                                values["end_time"]
+                            ).format("YYYY-MM-DD HH:mm:ss")
                         yield values
 
 
@@ -827,14 +846,18 @@ class UserInsightsStream(InstagramStream):
                             item = {
                                 "context": key,
                                 "value": value,
-                                "end_time": pendulum.parse(values["end_time"]).format("YYYY-MM-DD HH:mm:ss"),
+                                "end_time": pendulum.parse(values["end_time"]).format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                ),
                             }
                             item.update(base_item)
                             yield item
                     else:
                         values.update(base_item)
                         if "end_time" in values:
-                            values["end_time"] = pendulum.parse(values["end_time"]).format("YYYY-MM-DD HH:mm:ss")
+                            values["end_time"] = pendulum.parse(
+                                values["end_time"]
+                            ).format("YYYY-MM-DD HH:mm:ss")
                         yield values
 
 
