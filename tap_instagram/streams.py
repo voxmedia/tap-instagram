@@ -501,9 +501,10 @@ class MediaInsightsStream(InstagramStream):
         self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         params = super().get_url_params(context, next_page_token)
-        params["metric"] = self._metrics_for_media_type(
+        metrics = self._metrics_for_media_type(
             context["media_type"], context["media_product_type"]
         )
+        params["metric"] = ",".join(metrics)
         return params
 
     def validate_response(self, response: requests.Response) -> None:
@@ -664,9 +665,10 @@ class StoryInsightsStream(InstagramStream):
         self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         params = super().get_url_params(context, next_page_token)
-        params["metric"] = self._metrics_for_media_type(
+        metrics = self._metrics_for_media_type(
             context["media_type"], context["media_product_type"]
         )
+        params["metric"] = ",".join(metrics)
         return params
 
     def validate_response(self, response: requests.Response) -> None:
