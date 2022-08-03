@@ -467,6 +467,16 @@ class MediaInsightsStream(InstagramStream):
                     "taps_forward",
                     "taps_back",
                 ]
+            elif media_product_type == "REELS":
+                return [
+                    "comments",
+                    "likes",
+                    "plays",
+                    "reach",
+                    "saved",
+                    "shares",
+                    "total_interactions",
+                ]
             else:  # media_product_type is "AD" or "FEED"
                 metrics = [
                     "engagement",
