@@ -177,12 +177,6 @@ class MediaStream(InstagramStream):
             th.StringType,
             description="Username of user who created the media.",
         ),
-        th.Property(
-            "video_title",
-            th.StringType,
-            description="Instagram TV media title. Will not be returned if targeting an Instagram TV video created on "
-            "or after October 5, 2021.",
-        ),
     ).to_dict()
 
     def make_since_param(self, context: Optional[dict]) -> datetime:
