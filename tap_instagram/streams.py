@@ -81,7 +81,6 @@ class MediaStream(InstagramStream):
         "thumbnail_url",
         "timestamp",
         "username",
-        "video_title",
     ]
     # Optionally, you may also use `schema_filepath` in place of `schema`:
     # schema_filepath = SCHEMAS_DIR / "users.json"
