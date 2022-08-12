@@ -407,7 +407,7 @@ class MediaInsightsStream(InstagramStream):
     path = "/{media_id}/insights"
     parent_stream_type = MediaStream
     state_partitioning_keys = ["user_id"]
-    primary_keys = "id"
+    primary_keys = ["id"]
     replication_key = None
     records_jsonpath = "$.data[*]"
 
@@ -581,7 +581,7 @@ class StoryInsightsStream(InstagramStream):
     path = "/{media_id}/insights"
     parent_stream_type = StoriesStream
     state_partitioning_keys = ["user_id"]
-    primary_keys = "id"
+    primary_keys = ["id"]
     replication_key = None
     records_jsonpath = "$.data[*]"
 
@@ -725,7 +725,7 @@ class StoryInsightsStream(InstagramStream):
 class UserInsightsStream(InstagramStream):
     parent_stream_type = UsersStream
     path = "/{user_id}/insights"  # user_id is populated using child context keys from UsersStream
-    primary_keys = "id"
+    primary_keys = ["id"]
     replication_key = "end_time"
     records_jsonpath = "$.data[*]"
     has_pagination = True
