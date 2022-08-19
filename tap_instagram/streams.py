@@ -81,7 +81,6 @@ class MediaStream(InstagramStream):
         "thumbnail_url",
         "timestamp",
         "username",
-        "video_title",
     ]
     # Optionally, you may also use `schema_filepath` in place of `schema`:
     # schema_filepath = SCHEMAS_DIR / "users.json"
@@ -177,12 +176,6 @@ class MediaStream(InstagramStream):
             "username",
             th.StringType,
             description="Username of user who created the media.",
-        ),
-        th.Property(
-            "video_title",
-            th.StringType,
-            description="Instagram TV media title. Will not be returned if targeting an Instagram TV video created on "
-            "or after October 5, 2021.",
         ),
     ).to_dict()
 
@@ -244,7 +237,6 @@ class StoriesStream(InstagramStream):
         "thumbnail_url",
         "timestamp",
         "username",
-        "video_title",
     ]
     # Optionally, you may also use `schema_filepath` in place of `schema`:
     # schema_filepath = SCHEMAS_DIR / "users.json"
@@ -341,12 +333,6 @@ class StoriesStream(InstagramStream):
             th.StringType,
             description="Username of user who created the media.",
         ),
-        th.Property(
-            "video_title",
-            th.StringType,
-            description="Instagram TV media title. Will not be returned if targeting an Instagram TV video created on "
-            "or after October 5, 2021.",
-        ),
     ).to_dict()
 
     def get_url_params(
@@ -381,7 +367,7 @@ class MediaChildrenStream(MediaStream):
     parent_stream_type = MediaStream
     state_partitioning_keys = ["user_id"]
     path = "/{media_id}/children"  # media_id is populated using child context keys from MediaStream
-    # caption, comments_count, is_comment_enabled, like_count, media_product_type, video_title
+    # caption, comments_count, is_comment_enabled, like_count, media_product_type
     # not available on album children
     # TODO: Is media_product_type available on children of some media types? carousel vs album children?
     # https://developers.facebook.com/docs/instagram-api/reference/ig-media#fields
@@ -414,7 +400,7 @@ class MediaInsightsStream(InstagramStream):
     path = "/{media_id}/insights"
     parent_stream_type = MediaStream
     state_partitioning_keys = ["user_id"]
-    primary_keys = "id"
+    primary_keys = ["id"]
     replication_key = None
     records_jsonpath = "$.data[*]"
 
@@ -473,6 +459,16 @@ class MediaInsightsStream(InstagramStream):
                     "replies",
                     "taps_forward",
                     "taps_back",
+                ]
+            elif media_product_type == "REELS":
+                return [
+                    "comments",
+                    "likes",
+                    "plays",
+                    "reach",
+                    "saved",
+                    "shares",
+                    "total_interactions",
                 ]
             else:  # media_product_type is "AD" or "FEED"
                 metrics = [
@@ -578,7 +574,7 @@ class StoryInsightsStream(InstagramStream):
     path = "/{media_id}/insights"
     parent_stream_type = StoriesStream
     state_partitioning_keys = ["user_id"]
-    primary_keys = "id"
+    primary_keys = ["id"]
     replication_key = None
     records_jsonpath = "$.data[*]"
 
@@ -722,7 +718,7 @@ class StoryInsightsStream(InstagramStream):
 class UserInsightsStream(InstagramStream):
     parent_stream_type = UsersStream
     path = "/{user_id}/insights"  # user_id is populated using child context keys from UsersStream
-    primary_keys = "id"
+    primary_keys = ["id"]
     replication_key = "end_time"
     records_jsonpath = "$.data[*]"
     has_pagination = True
