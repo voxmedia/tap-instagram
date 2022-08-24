@@ -504,11 +504,12 @@ class MediaInsightsStream(InstagramStream):
         return params
 
     def validate_response(self, response: requests.Response) -> None:
+        res_json = response.json()
         if (
-            response.json().get("error", {}).get("error_user_title")
+            res_json.get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            response.json().get("error", {}).get("error_user_title")
+            res_json.get("error", {}).get("error_user_title")
             in "(#10) Not enough viewers for the media to show insights"
 
         ):
@@ -675,11 +676,12 @@ class StoryInsightsStream(InstagramStream):
         return params
 
     def validate_response(self, response: requests.Response) -> None:
+        res_json = response.json()
         if (
-            response.json().get("error", {}).get("error_user_title")
+            res_json.get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            response.json().get("error", {}).get("error_user_title")
+            res_json.get("error", {}).get("error_user_title")
             in "(#10) Not enough viewers for the media to show insights"
         ):
             self.logger.warning(f"Skipping: {response.json()['error']}")
