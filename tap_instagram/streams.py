@@ -504,6 +504,7 @@ class MediaInsightsStream(InstagramStream):
         return params
 
     def validate_response(self, response: requests.Response) -> None:
+        res_json = ""
         res_json = response.json()
         if (
             res_json.get("error", {}).get("error_user_title")
@@ -676,6 +677,7 @@ class StoryInsightsStream(InstagramStream):
         return params
 
     def validate_response(self, response: requests.Response) -> None:
+        res_json = ""
         res_json = response.json()
         if (
             res_json.get("error", {}).get("error_user_title")
