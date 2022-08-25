@@ -508,9 +508,8 @@ class MediaInsightsStream(InstagramStream):
             response.json().get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            str(response.json().get("error", {}).get("message"))
-            in "(#10) Not enough viewers for the media to show insights"
-
+            "(#10) Not enough viewers for the media to show insights"
+            in str(response.json().get("error", {}).get("message"))
         ):
             self.logger.warning(f"Skipping: {response.json()['error']}")
             return
@@ -524,8 +523,8 @@ class MediaInsightsStream(InstagramStream):
             resp_json.get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            str(resp_json.get("error", {}).get("message"))
-            in "(#10) Not enough viewers for the media to show insights"
+            "(#10) Not enough viewers for the media to show insights"
+            in str(resp_json.get("error", {}).get("message"))
         ):
             return
         for row in resp_json["data"]:
@@ -679,8 +678,8 @@ class StoryInsightsStream(InstagramStream):
             response.json().get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            str(response.json().get("error", {}).get("message"))
-            in "(#10) Not enough viewers for the media to show insights"
+            "(#10) Not enough viewers for the media to show insights"
+            in str(response.json().get("error", {}).get("message"))
         ):
             self.logger.warning(f"Skipping: {response.json()['error']}")
             return
@@ -694,8 +693,8 @@ class StoryInsightsStream(InstagramStream):
             resp_json.get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            str(resp_json.get("error", {}).get("message"))
-            in "(#10) Not enough viewers for the media to show insights"
+            "(#10) Not enough viewers for the media to show insights"
+            in str(resp_json.get("error", {}).get("message"))
         ):
             return
         for row in resp_json["data"]:
