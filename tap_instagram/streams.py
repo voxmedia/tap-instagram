@@ -508,7 +508,7 @@ class MediaInsightsStream(InstagramStream):
             response.json().get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            str(response.json().get("error", {}).get("error_user_title"))
+            str(response.json().get("error", {}).get("message"))
             in "(#10) Not enough viewers for the media to show insights"
 
         ):
@@ -524,7 +524,7 @@ class MediaInsightsStream(InstagramStream):
             resp_json.get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            str(resp_json.get("error", {}).get("error_user_title"))
+            str(resp_json.get("error", {}).get("message"))
             in "(#10) Not enough viewers for the media to show insights"
         ):
             return
@@ -679,7 +679,7 @@ class StoryInsightsStream(InstagramStream):
             response.json().get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            str(response.json().get("error", {}).get("error_user_title"))
+            str(response.json().get("error", {}).get("message"))
             in "(#10) Not enough viewers for the media to show insights"
         ):
             self.logger.warning(f"Skipping: {response.json()['error']}")
@@ -694,7 +694,7 @@ class StoryInsightsStream(InstagramStream):
             resp_json.get("error", {}).get("error_user_title")
             == "Media posted before business account conversion"
             or
-            str(resp_json.get("error", {}).get("error_user_title"))
+            str(resp_json.get("error", {}).get("message"))
             in "(#10) Not enough viewers for the media to show insights"
         ):
             return
