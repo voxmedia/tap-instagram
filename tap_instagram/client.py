@@ -67,18 +67,22 @@ class InstagramStream(RESTStream):
     def validate_response(self, response: requests.Response) -> None:
         if (
             response.status_code == 400
-            and 'Unsupported get request' in str(response.json().get("error", {}).get("message"))   
+            and 'Unsupported get request' in str(
+                response.json().get("error", {}).get("message")
+            )
         ):
             msg = (
                 f"{response.status_code} Client Error: "
-                f"{response.reason} - {response.json()['error']['message']} for path: {self.path}"
+                f"{response.reason} - {response.json()['error']['message']}"
+                f" for path: {self.path}"
             )
             raise UnsupportedGetRequestError(msg)
 
-        elif 401 <= response.status_code < 500:
+        elif 400 <= response.status_code < 500:
             msg = (
                 f"{response.status_code} Client Error: "
-                f"{response.reason} - {response.json()['error']['message']} for path: {self.path}"
+                f"{response.reason} - {response.json()['error']['message']}"
+                f" for path: {self.path}"
             )
             raise FatalAPIError(msg)
 
@@ -113,7 +117,7 @@ class InstagramStream(RESTStream):
 
 class UnsupportedGetRequestError(Exception):
     """
-    Error object to facilitate skipping IDs that cause trouble 
-    with the API but aren't themselves grounds for ending the 
+    Error object to facilitate skipping IDs that cause trouble
+    with the API but aren't themselves grounds for ending the
     entire ingestion process.
     """
