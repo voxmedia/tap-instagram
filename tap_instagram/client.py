@@ -65,11 +65,8 @@ class InstagramStream(RESTStream):
         yield from extract_jsonpath(self.records_jsonpath, input=response.json())
 
     def validate_response(self, response: requests.Response) -> None:
-        if (
-            response.status_code == 400
-            and 'Unsupported get request' in str(
-                response.json().get("error", {}).get("message")
-            )
+        if response.status_code == 400 and "Unsupported get request" in str(
+            response.json().get("error", {}).get("message")
         ):
             msg = (
                 f"{response.status_code} Client Error: "
