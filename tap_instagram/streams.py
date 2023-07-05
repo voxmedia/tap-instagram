@@ -722,7 +722,6 @@ class StoryInsightsStream(InstagramStream):
 class UserInsightsStream(InstagramStream):
     parent_stream_type = UsersStream
     path = "/{user_id}/insights"  # user_id is populated using child context keys from UsersStream
-    primary_keys = ["id"]
     replication_key = "end_time"
     records_jsonpath = "$.data[*]"
     has_pagination = True
@@ -848,10 +847,11 @@ class UserInsightsStream(InstagramStream):
                             item = {
                                 "context": key,
                                 "value": value,
-                                "end_time": pendulum.parse(values["end_time"]).format(
-                                    "YYYY-MM-DD HH:mm:ss"
-                                ),
                             }
+                            if "end_time" in values:
+                                item["end_time"] = pendulum.parse(values["end_time"]).format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                )
                             item.update(base_item)
                             yield item
                     else:
@@ -862,6 +862,11 @@ class UserInsightsStream(InstagramStream):
                             ).format("YYYY-MM-DD HH:mm:ss")
                         yield values
 
+
+class UserInsightsPeriodStream(UserInsightsStream):
+    time_period: str  #  must define in the subclass
+    primary_keys = ['id', 'end_time']
+    
 
 class UserInsightsOnlineFollowersStream(UserInsightsStream):
     """Define custom stream."""
@@ -884,9 +889,10 @@ class UserInsightsAudienceStream(UserInsightsStream):
     ]
     time_period = "lifetime"
     has_pagination = False
+    replication_method = 'FULL_TABLE'
 
 
-class UserInsightsFollowersStream(UserInsightsStream):
+class UserInsightsFollowersStream(UserInsightsPeriodStream):
     """Define custom stream."""
 
     name = "user_insights_followers"
@@ -895,7 +901,7 @@ class UserInsightsFollowersStream(UserInsightsStream):
     min_start_date = pendulum.now("UTC").subtract(days=30)
 
 
-class UserInsightsDailyStream(UserInsightsStream):
+class UserInsightsDailyStream(UserInsightsPeriodStream):
     """Define custom stream."""
 
     name = "user_insights_daily"
@@ -912,7 +918,7 @@ class UserInsightsDailyStream(UserInsightsStream):
     time_period = "day"
 
 
-class UserInsightsWeeklyStream(UserInsightsStream):
+class UserInsightsWeeklyStream(UserInsightsPeriodStream):
     """Define custom stream."""
 
     name = "user_insights_weekly"
@@ -923,7 +929,7 @@ class UserInsightsWeeklyStream(UserInsightsStream):
     time_period = "week"
 
 
-class UserInsights28DayStream(UserInsightsStream):
+class UserInsights28DayStream(UserInsightsPeriodStream):
     """Define custom stream."""
 
     name = "user_insights_28day"
