@@ -872,18 +872,18 @@ class UserInsightsOnlineFollowersStream(UserInsightsStream):
     # TODO: Add note about online_followers seemingly only going back 30 days
 
 
-class UserInsightsAudienceStream(UserInsightsStream):
-    """Define custom stream."""
-
-    name = "user_insights_audience"
-    metrics = [
-        "audience_city",
-        "audience_country",
-        "audience_gender_age",
-        "audience_locale",
-    ]
-    time_period = "lifetime"
-    has_pagination = False
+# class UserInsightsAudienceStream(UserInsightsStream):
+#     """Define custom stream."""
+#
+#     name = "user_insights_audience"
+#     metrics = [
+#         "audience_city",
+#         "audience_country",
+#         "audience_gender_age",
+#         "audience_locale",
+#     ]
+#     time_period = "lifetime"
+#     has_pagination = False
 
 
 class UserInsightsFollowersStream(UserInsightsStream):
