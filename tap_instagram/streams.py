@@ -472,7 +472,7 @@ class MediaInsightsStream(InstagramStream):
                 ]
             else:  # media_product_type is "AD" or "FEED"
                 metrics = [
-                    "engagement",
+                    "total_interactions",
                     "impressions",
                     "reach",
                     "saved",
@@ -482,11 +482,11 @@ class MediaInsightsStream(InstagramStream):
                 return metrics
         elif media_type == "CAROUSEL_ALBUM":
             return [
-                "carousel_album_engagement",
-                "carousel_album_impressions",
-                "carousel_album_reach",
-                "carousel_album_saved",
-                "carousel_album_video_views",
+                "total_interactions",
+                "impressions",
+                "reach",
+                "saved",
+                "video_views",
             ]
         else:
             raise ValueError(
@@ -629,16 +629,16 @@ class StoryInsightsStream(InstagramStream):
         if media_type in ("IMAGE", "VIDEO"):
             if media_product_type == "STORY":
                 return [
-                    "exits",
+                    # "exits",
                     "impressions",
                     "reach",
                     "replies",
-                    "taps_forward",
-                    "taps_back",
+                    # "taps_forward",
+                    # "taps_back",
                 ]
             else:  # media_product_type is "AD" or "FEED"
                 metrics = [
-                    "engagement",
+                    "total_interactions",
                     "impressions",
                     "reach",
                     "saved",
@@ -648,11 +648,11 @@ class StoryInsightsStream(InstagramStream):
                 return metrics
         elif media_type == "CAROUSEL_ALBUM":
             return [
-                "carousel_album_engagement",
-                "carousel_album_impressions",
-                "carousel_album_reach",
-                "carousel_album_saved",
-                "carousel_album_video_views",
+                "total_interactions",
+                "impressions",
+                "reach",
+                "saved",
+                "video_views",
             ]
         else:
             raise ValueError(
