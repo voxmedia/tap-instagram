@@ -72,7 +72,7 @@ class TapInstagram(Tap):
         th.Property(
             "metrics_log_level",
             th.StringType,
-            description="A user access token",
+            description="The logging level to use for emitting metrics",
         ),
     ).to_dict()
 
